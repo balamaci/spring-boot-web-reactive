@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- 
+    For more configuration information and examples see
+    http://logback.qos.ch/manual/configuration.html
+-->
+<configuration debug="true" scan="false">
+
+
+    <!-- Debugging appender (duplicates the normal log, PLUS any debug messages) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] %level{5} %c{5} - %message%n</pattern>
+        </encoder>
+    </appender>
+    <!---->
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./log/server-file.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./log/server-file.log.%d{yyyyMMdd}-%i
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>256MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] %level{5} %c{3} - %message%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="sample.web.reactive" level="INFO" additivity="false">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- ROOT logger setup -->
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

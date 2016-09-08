@@ -22,19 +22,28 @@ public class ReactiveClientApplication {
 		context.register(ReactorClientConfig.class);
 
 		context.refresh();
-
-		WebClient webClient = context.getBean(WebClient.class);
-		ClientWebRequestBuilder webRequestBuilder = new RxJava1ClientWebRequestBuilder(HttpMethod.GET,
-				"http://locahost:8080/many")
-				.accept("text/event-stream");
-
-		Observable<String> ids = webClient.perform(webRequestBuilder)
-				.extract(RxJava1ResponseExtractors.bodyStream(String.class));
-
-        ids.subscribe(id -> log.info("Received {}", id));
-
 		log.info("Starting up...");
 		context.start();
+
+		WebClient webClient = context.getBean(WebClient.class);
+		Observable.range(0, 10).flatMap(id -> {
+			ClientWebRequestBuilder webRequestBuilder = new RxJava1ClientWebRequestBuilder(HttpMethod.GET,
+					"http://localhost:8080/many?id=" + id)
+					.accept("text/event-stream");
+
+			Observable<String> ids = webClient.perform(webRequestBuilder)
+					.extract(RxJava1ResponseExtractors.bodyStream(String.class));
+			return ids;
+		}).toBlocking()
+				.subscribe(returnedValue -> log.info("Received {}", returnedValue),
+							err -> log.error("Error ", err)
+				);
+
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 
 	}
