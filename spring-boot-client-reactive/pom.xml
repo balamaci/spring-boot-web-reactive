@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot.experimental</groupId>
+		<artifactId>spring-boot-web-reactive-build</artifactId>
+		<version>0.1.0.BUILD-SNAPSHOT</version>
+		<relativePath>../spring-boot-web-reactive-build</relativePath>
+	</parent>
+
+	<artifactId>spring-boot-client-reactive</artifactId>
+	<name>Sample project for Spring Boot Reactive web client</name>
+	<description>Spring Boot Client Reactive Sample</description>
+
+    <properties>
+        <rxjava.version>1.1.9</rxjava.version>
+    </properties>
+
+
+
+	<dependencies>
+        <dependency>
+            <groupId>io.reactivex</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>${rxjava.version}</version>
+        </dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web-reactive</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.projectreactor.ipc</groupId>
+			<artifactId>reactor-netty</artifactId>
+			<version>${reactor-ipc.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot.experimental</groupId>
+			<artifactId>spring-boot-autoconfigure-web-reactive</artifactId>
+			<version>0.1.0.BUILD-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
+		</dependency>
+
+	</dependencies>
+
+</project>

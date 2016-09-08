@@ -14,10 +14,10 @@
     <!---->
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./log/elk-file.log</file>
+        <file>./log/server-file.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./log/elk-file.log.%d{yyyyMMdd}-%i
+            <fileNamePattern>./log/server-file.log.%d{yyyyMMdd}-%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>256MB</maxFileSize>
@@ -29,7 +29,7 @@
     </appender>
 
 
-    <logger name="ro.fortsoft.elk.testdata" level="INFO" additivity="false">
+    <logger name="sample.web.reactive" level="INFO" additivity="false">
         <appender-ref ref="FILE"/>
         <appender-ref ref="CONSOLE"/>
     </logger>

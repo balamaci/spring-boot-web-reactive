@@ -3,16 +3,14 @@ package sample.web.reactive;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -28,6 +26,7 @@ public class HomeController {
 	@GetMapping(value = "/many")
 	public Observable<String> many(@RequestParam String id) {
 		return Observable.interval(1, TimeUnit.SECONDS)
+				.observeOn(Schedulers.io())
 				.doOnNext(val -> log.info("Emitting val {}", val))
 				.map(val -> "Val " + val + " id=" + id)
 				.take(20);
@@ -40,15 +39,5 @@ public class HomeController {
 */
 	}
 
-	@GetMapping("/sse-many")
-	Flux<ServerSentEvent<String>> sse() {
-		return Flux
-				.interval(Duration.ofSeconds(1))
-				.map(l -> ServerSentEvent
-						.builder("foo\nbar")
-						.comment("bar\nbaz")
-						.id(Long.toString(l))
-						.build());
-	}
 
 }
