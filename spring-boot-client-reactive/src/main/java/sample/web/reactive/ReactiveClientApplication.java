@@ -26,21 +26,25 @@ public class ReactiveClientApplication {
 		context.start();
 
 		WebClient webClient = context.getBean(WebClient.class);
-		Observable.range(0, 10).flatMap(id -> {
-			ClientWebRequestBuilder webRequestBuilder = new RxJava1ClientWebRequestBuilder(HttpMethod.GET,
-					"http://localhost:8080/many?id=" + id)
-					.accept("text/event-stream");
 
-			Observable<String> ids = webClient.perform(webRequestBuilder)
-					.extract(RxJava1ResponseExtractors.bodyStream(String.class));
-			return ids;
-		}).toBlocking()
-				.subscribe(returnedValue -> log.info("Received {}", returnedValue),
-							err -> log.error("Error ", err)
+		Observable.range(0, 200)
+//				.observeOn(Schedulers.io())
+				.flatMap(id -> {
+					ClientWebRequestBuilder webRequestBuilder = new RxJava1ClientWebRequestBuilder(HttpMethod.GET,
+							"http://localhost:8080/sse?id=" + id)
+							.accept("text/event-stream");
+
+					Observable<String> ids = webClient.perform(webRequestBuilder)
+							.extract(RxJava1ResponseExtractors.bodyStream(String.class))
+							.map(resp -> resp.replace("\n", ""))
+							.filter(response -> ! response.isEmpty());
+					return ids;
+				}, 50)
+				.subscribe(returnedValue -> log.info("Received '{}'", returnedValue),
+						err -> log.error("Error ", err)
 				);
-
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(600000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -10,8 +10,8 @@
 	</parent>
 
 	<artifactId>spring-boot-client-reactive</artifactId>
-	<name>Sample project for Spring Boot Reactive web client</name>
-	<description>Spring Boot Client Reactive Sample</description>
+	<name>Sample Reactive Client</name>
+	<description>Spring Boot Reactive Client Sample</description>
 
     <properties>
         <rxjava.version>1.1.9</rxjava.version>

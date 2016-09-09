@@ -3,6 +3,7 @@ package sample.web.reactive;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,14 +31,19 @@ public class HomeController {
 				.doOnNext(val -> log.info("Emitting val {}", val))
 				.map(val -> "Val " + val + " id=" + id)
 				.take(20);
-
-/*
-		return Flux
-				.interval(Duration.ofSeconds(1))
-				.doOnNext(val -> System.out.println("Emitting" + val))
-				.map(val -> "Val" + val + "");
-*/
 	}
 
 
+	@GetMapping(value = "/sse")
+	public Observable<ServerSentEvent<String>> sseStream(@RequestParam String id) {
+		return Observable.interval(1, TimeUnit.SECONDS)
+				.observeOn(Schedulers.io())
+				.doOnNext(val -> log.info("Emitting val {}", val))
+				.map(val -> ServerSentEvent.<String>builder()
+						.id(id + "-" + val)
+						.data("val=" + val)
+						.build())
+				.take(20);
+
+	}
 }
